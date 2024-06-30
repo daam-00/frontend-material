@@ -6,15 +6,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const ReceiptsPage = () => {
   const [showReceiptModal, setShowReceiptModal] = useState(false);
-  const [currentReceipt, setCurrentReceipt] = useState(null);
 
   const handleAddReceipt = () => {
-    setCurrentReceipt(null);
-    setShowReceiptModal(true);
-  };
-
-  const handleEditReceipt = (id) => {
-    setCurrentReceipt(id);
     setShowReceiptModal(true);
   };
 
@@ -24,7 +17,7 @@ const ReceiptsPage = () => {
 
   const handleSaveReceipt = () => {
     setShowReceiptModal(false);
-    // Additional logic to handle after save
+    window.location.reload(); // Refresh the page after saving the receipt
   };
 
   return (
@@ -39,7 +32,7 @@ const ReceiptsPage = () => {
           Add Receipt
         </Button>
       </Box>
-      <ReceiptList onEdit={handleEditReceipt} />
+      <ReceiptList />
       {showReceiptModal && (
         <ReceiptForm onSave={handleSaveReceipt} onClose={handleCloseModal} />
       )}
