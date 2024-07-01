@@ -9,11 +9,6 @@ const headerStyle = {
   backgroundColor: '#f8f8f8',
 };
 
-const logoStyle = {
-  fontSize: '24px',
-  fontWeight: 'bold',
-};
-
 const navStyle = {
   listStyle: 'none',
   display: 'flex',
@@ -30,18 +25,23 @@ const companyNameStyle = {
 };
 
 const Header = () => {
+  const logoStyle = {
+    width: '100px',  // Imposta la larghezza dell'immagine
+    height: 'auto',  // L'altezza si adatterà proporzionalmente alla larghezza
+  };
+
   return (
     <header style={headerStyle}>
-      <div style={logoStyle}>LOGO</div>
+      <img src="https://i.ibb.co/0hM0GDn/Reviva-Full-Logo-Color-con-f.png" alt="Logo" style={logoStyle} />
       <nav>
         <ul style={navStyle}>
           <li><Link to="/" style={navLinkStyle}>Home</Link></li>
-          <li><Link to="/users" style={navLinkStyle}>Users</Link></li>
-          <li><Link to="/materials" style={navLinkStyle}>Materials</Link></li>
-          <li><Link to="/receipts" style={navLinkStyle}>Receipts</Link></li>
+          <li><Link to="/users" style={navLinkStyle}>Utenti</Link></li>
+          <li><Link to="/materials" style={navLinkStyle}>Materiali</Link></li>
+          <li><Link to="/receipts" style={navLinkStyle}>Ricevuta</Link></li>
         </ul>
       </nav>
-      <div style={companyNameStyle}>Company Name</div>
+      <div style={companyNameStyle}>REGISTRO METALLI</div>
     </header>
   );
 };

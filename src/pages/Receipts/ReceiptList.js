@@ -19,17 +19,17 @@ const ReceiptList = ({ searchQuery }) => {
       const response = await axios.get('http://localhost:9090/api/receipts');
       setReceipts(response.data || []);
     } catch (error) {
-      console.error('Error fetching receipts', error);
+      console.error('Errore durante il recupero delle ricevute', error);
     }
   };
 
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:9090/api/receipts/${id}`);
-      fetchReceipts(); // Refresh the list after deletion
+      fetchReceipts(); // Aggiorna l'elenco dopo l'eliminazione
       setDeleteReceiptId(null);
     } catch (error) {
-      console.error('Error deleting receipt', error);
+      console.error('Errore durante l\'eliminazione della ricevuta', error);
     }
   };
 
@@ -63,7 +63,7 @@ const ReceiptList = ({ searchQuery }) => {
 
     doc.autoTable({
       startY: 55,
-      head: [['User', 'Codice Fiscale', 'Birth Date', 'Birth Place', 'Residenza']],
+      head: [['Utente', 'Codice Fiscale', 'Data di Nascita', 'Luogo di Nascita', 'Residenza']],
       body: [[`${user.firstName} ${user.lastName}`, user.codiceFiscale, new Date(user.birthDate).toLocaleDateString(), user.birthPlace, user.residenza]]
     });
 
@@ -78,7 +78,7 @@ const ReceiptList = ({ searchQuery }) => {
     doc.autoTable({
       startY: doc.autoTable.previous.finalY + 35,
       head: [['QUANTITA\'', 'DESCRIZIONE', 'MATERIALE', 'PREZZO UNITARIO', 'IMPORTO']],
-      body: [[receipt.quantity, receipt.description, material.name, receipt.unitPrice, receipt.totalPrice]]
+      body: [[receipt.quantity, receipt.description, material.name, receipt.unitPrice, receipt.amount]]
     });
 
     doc.text(`PER UN VALORE COMPLESSIVO DI € ${receipt.totalPrice}`, 10, doc.autoTable.previous.finalY + 10);
@@ -87,11 +87,10 @@ const ReceiptList = ({ searchQuery }) => {
     doc.text(`Il confermo tutto sopra`, 10, doc.autoTable.previous.finalY + 30);
     doc.text(`Li ${new Date().toLocaleDateString()}`, 10, doc.autoTable.previous.finalY + 35);
     doc.text("in Fede", 10, doc.autoTable.previous.finalY + 40);
-
     doc.text("Ricevuta rilasciata fuori campo di applicazione dell'IVA di cui al D.P.R. N° 633 del 26.10.72", 10, doc.autoTable.previous.finalY + 50);
     doc.text("e successive modificazioni in quanto da privato", 10, doc.autoTable.previous.finalY + 55);
 
-    doc.save(`receipt_${receipt.receiptNumber}.pdf`);
+    doc.save(`ricevuta_${receipt.receiptNumber}.pdf`);
   };
 
   const generateExcel = (receipt) => {
@@ -99,27 +98,27 @@ const ReceiptList = ({ searchQuery }) => {
     const material = receipt.material || {};
 
     const data = [
-      ['Receipt Number', receipt.receiptNumber],
-      ['User Name', `${user.firstName} ${user.lastName}`],
+      ['Numero Ricevuta', receipt.receiptNumber],
+      ['Nome Utente', `${user.firstName} ${user.lastName}`],
       ['Codice Fiscale', user.codiceFiscale],
-      ['Birth Date', new Date(user.birthDate).toLocaleDateString()],
-      ['Birth Place', user.birthPlace],
+      ['Data di Nascita', new Date(user.birthDate).toLocaleDateString()],
+      ['Luogo di Nascita', user.birthPlace],
       ['Residenza', user.residenza],
-      ['Material', material.name],
-      ['Material Code', material.code],
-      ['Description', receipt.description],
-      ['Quantity', receipt.quantity],
-      ['Unit Price', receipt.unitPrice],
-      ['Total Price', receipt.totalPrice],
-      ['Payment Type', receipt.paymentType],
-      ['Due Date', new Date(receipt.dueDate).toLocaleDateString()],
-      ['Date', new Date(receipt.date).toLocaleString()],
+      ['Materiale', material.name],
+      ['Codice Materiale', material.code],
+      ['Descrizione', receipt.description],
+      ['Quantità', receipt.quantity],
+      ['Prezzo Unitario', receipt.unitPrice],
+      ['Prezzo Totale', receipt.totalPrice],
+      ['Tipo di Pagamento', receipt.paymentType],
+      ['Data di Scadenza', new Date(receipt.dueDate).toLocaleDateString()],
+      ['Data', new Date(receipt.date).toLocaleString()],
     ];
 
     const worksheet = XLSX.utils.aoa_to_sheet(data);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, `Receipt_${receipt.receiptNumber}`);
-    XLSX.writeFile(workbook, `receipt_${receipt.receiptNumber}.xlsx`);
+    XLSX.utils.book_append_sheet(workbook, worksheet, `Ricevuta_${receipt.receiptNumber}`);
+    XLSX.writeFile(workbook, `ricevuta_${receipt.receiptNumber}.xlsx`);
   };
 
   const filteredReceipts = receipts.filter(receipt => {
@@ -134,31 +133,29 @@ const ReceiptList = ({ searchQuery }) => {
         {filteredReceipts.map((receipt) => (
           <ListItem key={receipt.id}>
             <ListItemText
-              primary={`Receipt #${receipt.receiptNumber}`}
+              primary={`Ricevuta #${receipt.receiptNumber}`}
               secondary={
                 <>
-                  <div>User: {receipt.user ? `${receipt.user.firstName} ${receipt.user.lastName}` : 'Unknown'}</div>
-                  <div>Codice Fiscale: {receipt.user ? receipt.user.codiceFiscale : 'Unknown'}</div>
-                  <div>Birth Date: {receipt.user ? new Date(receipt.user.birthDate).toLocaleDateString() : 'Unknown'}</div>
-                  <div>Birth Place: {receipt.user ? receipt.user.birthPlace : 'Unknown'}</div>
-                  <div>Residenza: {receipt.user ? receipt.user.residenza : 'Unknown'}</div>
-                  <div>Material: {receipt.material ? receipt.material.name : 'Unknown'}</div>
-                  <div>Material Code: {receipt.material ? receipt.material.code : 'Unknown'}</div>
-                  <div>Description: {receipt.description}</div>
-                  <div>Quantity: {receipt.quantity}</div>
-                  <div>Unit Price: {receipt.unitPrice}</div>
-                  <div>Total Price: {receipt.totalPrice}</div>
-                  <div>Payment Type: {receipt.paymentType}</div>
-                  <div>Due Date: {new Date(receipt.dueDate).toLocaleDateString()}</div>
-                  <div>Date: {new Date(receipt.date).toLocaleString()}</div>
+                  <div>Utente: {receipt.user ? `${receipt.user.firstName} ${receipt.user.lastName}` : 'Sconosciuto'}</div>
+                  <div>Codice Fiscale: {receipt.user ? receipt.user.codiceFiscale : 'Sconosciuto'}</div>
+                  <div>Data di Nascita: {receipt.user ? new Date(receipt.user.birthDate).toLocaleDateString() : 'Sconosciuto'}</div>
+                  <div>Luogo di Nascita: {receipt.user ? receipt.user.birthPlace : 'Sconosciuto'}</div>
+                  <div>Residenza: {receipt.user ? receipt.user.residenza : 'Sconosciuto'}</div>
+                  <div>Materiale: {receipt.material ? receipt.material.name : 'Sconosciuto'}</div>
+                  <div>Codice Materiale: {receipt.material ? receipt.material.code : 'Sconosciuto'}</div>
+                  <div>Descrizione: {receipt.description}</div>
+                  <div>Quantità: {receipt.quantity}</div>
+                  <div>Prezzo Unitario: {receipt.unitPrice}</div>
+                  <div>Prezzo Totale: {receipt.totalPrice}</div>
+                  <div>Importo dato: {receipt.amount}</div>
+                  <div>Tipo di Pagamento: {receipt.paymentType}</div>
+                  <div>Data di Scadenza: {new Date(receipt.dueDate).toLocaleDateString()}</div>
+                  <div>Data: {new Date(receipt.date).toLocaleString()}</div>
                 </>
               }
             />
             <IconButton edge="end" onClick={() => generatePDF(receipt)}>
               <Save />
-            </IconButton>
-            <IconButton edge="end" onClick={() => generateExcel(receipt)}>
-              <Description />
             </IconButton>
             <IconButton edge="end" onClick={() => confirmDelete(receipt.id)}>
               <Delete />
@@ -168,13 +165,13 @@ const ReceiptList = ({ searchQuery }) => {
       </List>
 
       <Dialog open={Boolean(deleteReceiptId)} onClose={closeDialog}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogTitle>Conferma Eliminazione</DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to delete this receipt?</DialogContentText>
+          <DialogContentText>Sei sicuro di voler eliminare questa ricevuta?</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
-          <Button onClick={() => handleDelete(deleteReceiptId)} color="secondary">Delete</Button>
+          <Button onClick={closeDialog}>Cancella</Button>
+          <Button onClick={() => handleDelete(deleteReceiptId)} color="secondary">Elimina</Button>
         </DialogActions>
       </Dialog>
     </>

@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 
 const homePageStyle = {
   textAlign: 'center',
+  padding: '50px 20px',  // Aggiunto padding per migliorare lo spaziamento
 };
 
-const logoCenterStyle = {
-  width: '200px',
-  height: 'auto',
+const headerStyle = {
+  fontSize: '36px',
+  fontWeight: 'bold',
+  marginBottom: '30px',  // Aggiunto margine inferiore per separare dalla sezione azioni
 };
 
 const actionsStyle = {
@@ -24,6 +26,7 @@ const actionStyle = {
   borderRadius: '10px',
   textDecoration: 'none',
   color: '#333',
+  width: '200px',  // Aggiunto larghezza fissa per uniformità delle azioni
 };
 
 const iconStyle = {
@@ -34,8 +37,8 @@ const iconStyle = {
 const HomePage = () => {
   return (
     <div style={homePageStyle}>
-      <div className="logo-center">
-        <img src="/path-to-logo.png" alt="Logo" style={logoCenterStyle} />
+      <div style={headerStyle}>
+        BENVENUTO
       </div>
       <div style={actionsStyle}>
         <Link to="/users" style={actionStyle}>
@@ -46,7 +49,7 @@ const HomePage = () => {
           <div style={iconStyle}>+</div>
           <div>Crea Materiale</div>
         </Link>
-        <Link to="/create-receipt" style={actionStyle}>
+        <Link to="/receipts" style={actionStyle}>
           <div style={iconStyle}>+</div>
           <div>Crea Ricevuta</div>
         </Link>

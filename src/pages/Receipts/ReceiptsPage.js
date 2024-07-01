@@ -18,7 +18,7 @@ const ReceiptsPage = () => {
 
   const handleSaveReceipt = () => {
     setShowReceiptModal(false);
-    window.location.reload(); // Refresh the page after saving the receipt
+    window.location.reload(); // Aggiorna la pagina dopo aver salvato la ricevuta
   };
 
   const handleSearchChange = (event) => {
@@ -29,7 +29,7 @@ const ReceiptsPage = () => {
     <Container>
       <Box display="flex" justifyContent="space-between" mb={2}>
         <TextField
-          label="Search by Receipt Number or Name"
+          label="Cerca per Numero di Ricevuta o Nome"
           variant="outlined"
           value={searchQuery}
           onChange={handleSearchChange}
@@ -40,7 +40,7 @@ const ReceiptsPage = () => {
           startIcon={<AddCircleOutlineIcon />}
           onClick={handleAddReceipt}
         >
-          Add Receipt
+          Aggiungi Ricevuta
         </Button>
       </Box>
       <ReceiptList searchQuery={searchQuery} />

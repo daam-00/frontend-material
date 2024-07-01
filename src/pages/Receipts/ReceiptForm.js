@@ -30,7 +30,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
       const response = await axios.get('http://localhost:9090/api/users');
       setUsers(response.data);
     } catch (error) {
-      console.error('Error fetching users', error);
+      console.error('Errore durante il recupero degli utenti', error);
     }
   };
 
@@ -39,7 +39,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
       const response = await axios.get('http://localhost:9090/api/materials');
       setMaterials(response.data);
     } catch (error) {
-      console.error('Error fetching materials', error);
+      console.error('Errore durante il recupero dei materiali', error);
     }
   };
 
@@ -51,7 +51,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
         receiptNumber: response.data + 1
       }));
     } catch (error) {
-      console.error('Error fetching last receipt number', error);
+      console.error('Errore durante il recupero dell\'ultimo numero di ricevuta', error);
     }
   };
 
@@ -109,7 +109,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
       onSave();
       onClose();
     } catch (error) {
-      console.error('Error saving receipt', error);
+      console.error('Errore durante il salvataggio della ricevuta', error);
     }
   };
 
@@ -117,26 +117,26 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
     <Modal open={open} onClose={onClose}>
       <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 600, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
         <Typography variant="h6" gutterBottom>
-          Create Receipt
+          Crea Ricevuta
         </Typography>
         <Autocomplete
           options={users}
           getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
           onChange={handleUserChange}
-          renderInput={(params) => <TextField {...params} label="User" required />}
+          renderInput={(params) => <TextField {...params} label="Utente" required />}
         />
         <Autocomplete
           options={materials}
           getOptionLabel={(option) => option.name}
           onChange={handleMaterialChange}
-          renderInput={(params) => <TextField {...params} label="Material" required />}
+          renderInput={(params) => <TextField {...params} label="Materiale" required />}
         />
         <TextField
           margin="normal"
           required
           fullWidth
           id="description"
-          label="Description"
+          label="Descrizione"
           name="description"
           value={formData.description}
           onChange={handleChange}
@@ -146,7 +146,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
           required
           fullWidth
           id="unitPrice"
-          label="Unit Price"
+          label="Prezzo Unitario"
           name="unitPrice"
           value={formData.unitPrice}
           onChange={handleUnitPriceChange}
@@ -157,7 +157,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
           required
           fullWidth
           id="quantity"
-          label="Quantity"
+          label="Quantità"
           name="quantity"
           type="number"
           value={formData.quantity}
@@ -167,7 +167,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
           margin="normal"
           fullWidth
           id="totalPrice"
-          label="Total Price"
+          label="Prezzo Totale"
           name="totalPrice"
           value={formData.totalPrice}
           InputProps={{
@@ -179,7 +179,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
           required
           fullWidth
           id="receiptNumber"
-          label="Receipt Number"
+          label="Numero di Ricevuta"
           name="receiptNumber"
           value={formData.receiptNumber}
           onChange={handleChange}
@@ -187,11 +187,11 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={12}>
             <TableContainer component={Paper}>
-              <Table aria-label="pagamenti table">
+              <Table aria-label="tabella pagamenti">
                 <TableHead>
                   <TableRow>
                     <TableCell>Importo</TableCell>
-                    <TableCell>Payment Type</TableCell>
+                    <TableCell>Tipo di Pagamento</TableCell>
                     <TableCell>Scadenza</TableCell>
                   </TableRow>
                 </TableHead>
@@ -203,7 +203,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
                         required
                         fullWidth
                         id="amount"
-                        label="Amount"
+                        label=""
                         name="amount"
                         value={formData.amount}
                         onChange={handleChange}
@@ -216,7 +216,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
                         fullWidth
                         select
                         id="paymentType"
-                        label="Payment Type"
+                        label=""
                         name="paymentType"
                         value={formData.paymentType}
                         onChange={handleChange}
@@ -231,7 +231,7 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
                         required
                         fullWidth
                         id="dueDate"
-                        label="Scadenza"
+                        label=""
                         name="dueDate"
                         type="date"
                         InputLabelProps={{ shrink: true }}
@@ -247,11 +247,11 @@ const ReceiptForm = ({ open, onClose, onSave }) => {
         </Grid>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Save
+            Salva
           </Button>
           {onClose && (
             <Button fullWidth variant="outlined" onClick={onClose}>
-              Close
+              Chiudi
             </Button>
           )}
         </Box>
