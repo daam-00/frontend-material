@@ -32,7 +32,7 @@ const MaterialsPage = () => {
           startIcon={<AddCircleOutlineIcon />}
           onClick={() => setShowMaterialModal(true)}
         >
-          Create Material
+          Crea Materiale
         </Button>
       </Box>
 

@@ -51,14 +51,14 @@ const MaterialForm = ({ materialId, onClose, onSave }) => {
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
       <Typography variant="h6" gutterBottom>
-        {materialId ? 'Edit Material' : 'Create Material'}
+        {materialId ? 'Modifica Materiale' : 'Crea Materiale'}
       </Typography>
       <TextField
         margin="normal"
         required
         fullWidth
         id="code"
-        label="Code"
+        label="Codice"
         name="code"
         autoComplete="code"
         value={formData.code}
@@ -69,18 +69,18 @@ const MaterialForm = ({ materialId, onClose, onSave }) => {
         required
         fullWidth
         id="name"
-        label="Name"
+        label="Nome"
         name="name"
         autoComplete="name"
         value={formData.name}
         onChange={handleChange}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        Save
+        Salva
       </Button>
       {onClose && (
         <Button fullWidth variant="outlined" onClick={onClose}>
-          Close
+          Chiudi
         </Button>
       )}
     </Box>

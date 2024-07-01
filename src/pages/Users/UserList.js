@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { List, ListItem, ListItemText, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { List, ListItem, ListItemText, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, TextField } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 
 const UserList = ({ onEdit }) => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [deleteUserId, setDeleteUserId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchUsers();
@@ -15,8 +17,9 @@ const UserList = ({ onEdit }) => {
     try {
       const response = await axios.get('http://localhost:9090/api/users');
       setUsers(response.data || []);
+      setFilteredUsers(response.data || []);
     } catch (error) {
-      console.error('Error fetching users', error);
+      console.error('Errore nel recupero degli utenti', error);
     }
   };
 
@@ -26,7 +29,7 @@ const UserList = ({ onEdit }) => {
       fetchUsers(); // Refresh the list after deletion
       setDeleteUserId(null);
     } catch (error) {
-      console.error('Error deleting user', error);
+      console.error('Errore nella cancellazione dell\'utente', error);
     }
   };
 
@@ -38,14 +41,30 @@ const UserList = ({ onEdit }) => {
     setDeleteUserId(null);
   };
 
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    setFilteredUsers(users.filter(user => 
+      `${user.firstName} ${user.lastName}`.toLowerCase().includes(term)
+    ));
+  };
+
   return (
     <>
+      <TextField
+        label="Cerca Utente"
+        variant="outlined"
+        value={searchTerm}
+        onChange={handleSearch}
+        fullWidth
+        margin="normal"
+      />
       <List>
-        {users.map((user) => (
+        {filteredUsers.map((user) => (
           <ListItem key={user.id}>
             <ListItemText
-                       primary={`${user.firstName} ${user.lastName}`}
-                       secondary={`Birth Place: ${user.birthPlace}, Birth Date: ${new Date(user.birthDate).toLocaleDateString()}, Codice Fiscale: ${user.codiceFiscale}, Residenza: ${user.residenza}`}
+              primary={`${user.firstName} ${user.lastName}`}
+              secondary={`Luogo di nascita: ${user.birthPlace}, Data di nascita: ${new Date(user.birthDate).toLocaleDateString()}, Codice Fiscale: ${user.codiceFiscale}, Residenza: ${user.residenza}`}
             />
             <IconButton edge="end" onClick={() => onEdit(user.id)}>
               <Edit />

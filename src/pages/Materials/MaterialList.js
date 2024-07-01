@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { List, ListItem, ListItemText, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { List, ListItem, ListItemText, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, TextField } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 
 const MaterialList = ({ onEdit }) => {
   const [materials, setMaterials] = useState([]);
+  const [filteredMaterials, setFilteredMaterials] = useState([]);
   const [deleteMaterialId, setDeleteMaterialId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchMaterials();
@@ -15,8 +17,9 @@ const MaterialList = ({ onEdit }) => {
     try {
       const response = await axios.get('http://localhost:9090/api/materials');
       setMaterials(response.data || []);
+      setFilteredMaterials(response.data || []);
     } catch (error) {
-      console.error('Error fetching materials', error);
+      console.error('Errore nel recupero dei materiali', error);
     }
   };
 
@@ -26,7 +29,7 @@ const MaterialList = ({ onEdit }) => {
       fetchMaterials(); // Refresh the list after deletion
       setDeleteMaterialId(null);
     } catch (error) {
-      console.error('Error deleting material', error);
+      console.error('Errore nella cancellazione del materiale', error);
     }
   };
 
@@ -38,14 +41,30 @@ const MaterialList = ({ onEdit }) => {
     setDeleteMaterialId(null);
   };
 
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    setFilteredMaterials(materials.filter(material =>
+      material.name.toLowerCase().includes(term)
+    ));
+  };
+
   return (
     <>
+      <TextField
+        label="Cerca Materiale"
+        variant="outlined"
+        value={searchTerm}
+        onChange={handleSearch}
+        fullWidth
+        margin="normal"
+      />
       <List>
-        {materials.map((material) => (
+        {filteredMaterials.map((material) => (
           <ListItem key={material.id}>
             <ListItemText
               primary={material.name}
-              secondary={`Code: ${material.code}`}
+              secondary={`Codice: ${material.code}`}
             />
             <IconButton edge="end" onClick={() => onEdit(material.id)}>
               <Edit />
@@ -58,13 +77,13 @@ const MaterialList = ({ onEdit }) => {
       </List>
 
       <Dialog open={Boolean(deleteMaterialId)} onClose={closeDialog}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogTitle>Conferma Eliminazione</DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to delete this material?</DialogContentText>
+          <DialogContentText>Sei sicuro di voler eliminare questo materiale?</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
-          <Button onClick={() => handleDelete(deleteMaterialId)} color="secondary">Delete</Button>
+          <Button onClick={closeDialog}>Annulla</Button>
+          <Button onClick={() => handleDelete(deleteMaterialId)} color="secondary">Elimina</Button>
         </DialogActions>
       </Dialog>
     </>

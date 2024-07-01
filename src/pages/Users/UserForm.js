@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { TextField, Button, Box, Typography, MenuItem } from '@mui/material';
+import { TextField, Button, Box, Typography } from '@mui/material';
 
 const UserForm = ({ userId, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ const UserForm = ({ userId, onClose, onSave }) => {
       const response = await axios.get(`http://localhost:9090/api/users/${id}`);
       setFormData(response.data);
     } catch (error) {
-      console.error('Error fetching user', error);
+      console.error('Errore nel recupero dell\'utente', error);
     }
   };
 
@@ -49,21 +49,21 @@ const UserForm = ({ userId, onClose, onSave }) => {
       // Aggiungi questa linea per aggiornare la pagina
       window.location.reload();
     } catch (error) {
-      console.error('Error saving user', error);
+      console.error('Errore nel salvataggio dell\'utente', error);
     }
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
       <Typography variant="h6" gutterBottom>
-        {userId ? 'Edit User' : 'Create User'}
+        {userId ? 'Modifica Utente' : 'Crea Utente'}
       </Typography>
       <TextField
         margin="normal"
         required
         fullWidth
         id="firstName"
-        label="First Name"
+        label="Nome"
         name="firstName"
         autoComplete="firstName"
         value={formData.firstName}
@@ -74,7 +74,7 @@ const UserForm = ({ userId, onClose, onSave }) => {
         required
         fullWidth
         id="lastName"
-        label="Last Name"
+        label="Cognome"
         name="lastName"
         autoComplete="lastName"
         value={formData.lastName}
@@ -96,7 +96,7 @@ const UserForm = ({ userId, onClose, onSave }) => {
         required
         fullWidth
         id="birthDate"
-        label="Birth Date"
+        label="Data di Nascita"
         name="birthDate"
         type="date"
         InputLabelProps={{ shrink: true }}
@@ -108,7 +108,7 @@ const UserForm = ({ userId, onClose, onSave }) => {
         required
         fullWidth
         id="birthPlace"
-        label="Birth Place"
+        label="Luogo di Nascita"
         name="birthPlace"
         autoComplete="birthPlace"
         value={formData.birthPlace}
@@ -126,11 +126,11 @@ const UserForm = ({ userId, onClose, onSave }) => {
         onChange={handleChange}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        Save
+        Salva
       </Button>
       {onClose && (
         <Button fullWidth variant="outlined" onClick={onClose}>
-          Close
+          Chiudi
         </Button>
       )}
     </Box>
