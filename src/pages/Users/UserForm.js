@@ -46,7 +46,6 @@ const UserForm = ({ userId, onClose, onSave }) => {
       if (onSave) {
         onSave();
       }
-      // Aggiungi questa linea per aggiornare la pagina
       window.location.reload();
     } catch (error) {
       console.error('Errore nel salvataggio dell\'utente', error);
